@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { UserDataModel } from '../types/models'
 import { jwtSecret } from '../settings'
-import {jwtBlacklistRepo} from "../repositories/jwt-blacklist-repository";
+import { jwtBlacklistRepo } from '../repositories/jwt-blacklist-repository'
 
 export const jwtService = {
     async createToken(user: UserDataModel, duration: string | number): Promise<string> {

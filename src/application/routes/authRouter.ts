@@ -1,4 +1,4 @@
-import {confirmationCodeVdChain, emailVdChain, loginVdChain, registrationVdChain} from '../../inputValidation'
+import { confirmationCodeVdChain, emailVdChain, loginVdChain, registrationVdChain } from '../../inputValidation'
 import {
     APIErrorResult,
     LoginInputModel,
@@ -15,7 +15,7 @@ import { Result, validationResult } from 'express-validator'
 import { ErrorMapper } from '../../utils/errorMapper'
 import { usersService } from '../../domain/users-service'
 import { jwtService } from '../jwt-service'
-import {authMiddleware, refreshMiddleware} from '../../middlewares/auth-middlewares'
+import { authMiddleware, refreshMiddleware } from '../../middlewares/auth-middlewares'
 import { unconfirmedUsersService } from '../../domain/unconfirmed-users-service'
 import { accessTokenDuration, refreshTokenDuration } from '../../settings'
 import { jwtBlacklistService } from '../jwt-blacklist-service'
@@ -101,6 +101,8 @@ authRouter.get('/confirm-email', async (req: TypeOfRequestQuery<{ code: string }
 
 
 authRouter.post('/refresh-token', refreshMiddleware, async (req: Request, res: Response<LoginSuccessViewModel | null>) => {
+
+    await jwtBlacklistService.add(req)
     res.cookie('refreshToken', await jwtService.createToken(req.user!, refreshTokenDuration), { httpOnly: true, secure: true })
     res.status(200).json({accessToken: await jwtService.createToken(req.user!, accessTokenDuration)})
 })

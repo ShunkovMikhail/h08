@@ -4,7 +4,7 @@ const port = 5000
 
 const startApp = async () => {
     await runDb()
-    serverApp(port)
+    await serverApp(port)
 }
 
 startApp()
