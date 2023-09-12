@@ -24,7 +24,7 @@ exports.jwtService = {
     },
     verifyToken(token) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (yield jwt_blacklist_repository_1.jwtBlacklistRepo.get(token)) {
+            if (!(yield jwt_blacklist_repository_1.jwtBlacklistRepo.get(token))) {
                 try {
                     const result = jsonwebtoken_1.default.verify(token, settings_1.jwtSecret);
                     return result.userId;

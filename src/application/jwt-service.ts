@@ -9,7 +9,7 @@ export const jwtService = {
     },
 
     async verifyToken(token: string): Promise<string | null> {
-        if (await jwtBlacklistRepo.get(token)) {
+        if (!await jwtBlacklistRepo.get(token)) {
             try {
                 const result: any = jwt.verify(token, jwtSecret)
                 return result.userId

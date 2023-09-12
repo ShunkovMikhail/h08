@@ -9,6 +9,12 @@ export const jwtBlacklistService = {
             jwt: req.cookies.refreshToken,
             exp: add(new Date(), blacklistDuration).valueOf()
         })
+        if (req.headers.authorization) {
+            await jwtBlacklistRepo.add({
+                jwt: req.headers.authorization.split(' ')[1],
+                exp: add(new Date(), blacklistDuration).valueOf()
+            })
+        }
         await jwtBlacklistRepo.gc()
     }
 }

@@ -23,6 +23,12 @@ exports.jwtBlacklistService = {
                 jwt: req.cookies.refreshToken,
                 exp: (0, add_1.default)(new Date(), settings_1.blacklistDuration).valueOf()
             });
+            if (req.headers.authorization) {
+                yield jwt_blacklist_repository_1.jwtBlacklistRepo.add({
+                    jwt: req.headers.authorization.split(' ')[1],
+                    exp: (0, add_1.default)(new Date(), settings_1.blacklistDuration).valueOf()
+                });
+            }
             yield jwt_blacklist_repository_1.jwtBlacklistRepo.gc();
         });
     }

@@ -10,7 +10,7 @@ exports.mongoURI = process.env.MONGO_URL || 'mongodb://0.0.0.0:27017';
 exports.jwtSecret = process.env.JWT_SECRET || '12345';
 exports.emailPass = process.env.EMAIL_PASS || '123456789';
 //seconds if numeric
-exports.accessTokenDuration = 10;
-exports.refreshTokenDuration = 20;
+exports.accessTokenDuration = 100;
+exports.refreshTokenDuration = 200;
 //
-exports.blacklistDuration = { minutes: 1 }; //date-fns object
+exports.blacklistDuration = { minutes: 10 }; //date-fns object
