@@ -1,0 +1,70 @@
+import {
+    BlogPostInputModel,
+    PostInputModel,
+    PostViewModel,
+    TypeOfRequestBody,
+    TypeOfRequestP,
+    TypeOfRequestP_Body
+} from '../types/models'
+import { postsRepo } from '../repositories/posts-repository'
+import { DB } from '../repositories/mongo-db'
+
+export const postsService = {
+
+    async create(req: TypeOfRequestBody<PostInputModel>): Promise<PostViewModel> {
+
+        const newEntry: PostViewModel = {
+            id: postsRepo.newID(),
+            blogId: req.body.blogId,
+            blogName: await DB.getProperty('blogs', req.body.blogId, 'name'),
+            title: req.body.title,
+            shortDescription: req.body.shortDescription,
+            content: req.body.content,
+            createdAt: new Date().toISOString()
+        }
+
+        await postsRepo.create({ ...newEntry })
+        return newEntry
+    },
+
+
+
+    async createByBlog(req: TypeOfRequestBody<BlogPostInputModel>, bId: string): Promise<PostViewModel> {
+
+        const newEntry: PostViewModel = {
+            id: postsRepo.newID(),
+            blogId: bId,
+            blogName: await DB.getProperty('blogs', bId, 'name'),
+            title: req.body.title,
+            shortDescription: req.body.shortDescription,
+            content: req.body.content,
+            createdAt: new Date().toISOString()
+        }
+
+        await postsRepo.create({ ...newEntry })
+        return newEntry
+    },
+
+
+
+    async update(req: TypeOfRequestP_Body<{ id: string },
+        PostInputModel>): Promise<number> {
+
+        const updateEntry: PostInputModel = {
+            blogId: req.body.blogId,
+            title: req.body.title,
+            shortDescription: req.body.shortDescription,
+            content: req.body.content
+        }
+
+        await postsRepo.update(req.params.id, updateEntry)
+        return 204
+    },
+
+
+
+    async delete(req: TypeOfRequestP<{ id: string }>): Promise<number> {
+        return postsRepo.delete(req.params.id)
+    }
+
+}
